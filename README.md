@@ -10,7 +10,7 @@ Visit the [Codeworld](https://code.world/haskell#) webpage, copy & paste the `co
 With the [Haskell compiler](https://www.haskell.org/ghcup/) installed, just run the `console/Sokoban.hs` file from `main` branch.
 
 ## Contribute new mazes
-Feel free to fork this repository and add the new level(s) either as a separate file, or as modification of appropriate, existing files.
+Feel free to fork this repository and add the new level(s) either as a separate file, or as modification of appropriate, existing files. The mazes will undergo correctness tests before merging, but it would be great if you ensured that the maze is indeed possible to complete. Also try to keep the level difficulty in the `mazes` list on a linear scale, so that it ramps up throughout the game.
 
 ## Bug reports
 If you happened to find any bugs in either of the game versions, please create an Issue for it with a description of the problem you run into.
