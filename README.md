@@ -1,4 +1,4 @@
-# Sokoban! (MIMUW-JNP-3-Project)
+# Sokoban!
 Main project for the MIMUW-JNP-3 Haskell course (winter 2022/23) about recreating the [Sokoban](https://en.wikipedia.org/wiki/Sokoban) game in Haskell, starting from scratch.
 
 ## Play the game
