@@ -326,146 +326,6 @@ draw state
   | otherwise       = drawState state
 
 
------------
--- MAZES --
------------
--- This is a shared base of Sokoban mazes created by students attending
--- the 2022/23 MIMUW JNP-3 Haskell course. Any student is free to copy
--- the contents of this document for themselves, as well as to add the
--- mazes they have created themselves. Learn more about the base at
--- https://bit.ly/SokobanMazesMIMUW
-
--- correct mazes
-mazes :: [Maze]
-mazes = [
-  Maze (C (-2) (-2)) easy_testMaze_GN,
-  Maze (C 1 (-1))    easy_spiralMaze_DM,
-  Maze (C 0 0)       easy_decoratedMaze_BS,
-  Maze (C 1 1)       medium_maze4_GN,
-  Maze (C 0 1)       medium_maze3_GN,
-  Maze (C 1 (-3))    hard_maze2_GN
-  ]
-
-easy_testMaze_GN :: Coord -> Tile
-easy_testMaze_GN (C x y)
-  | abs x > 4  || abs y > 4  = Blank
-  | abs x == 4 || abs y == 4 = Wall
-  | x ==  2 && y <= 0        = Wall
-  | x ==  3 && y <= 0        = Storage
-  | x >= -2 && y == 0        = Box
-  | otherwise                = Ground
-
-hard_maze2_GN :: Coord -> Tile
-hard_maze2_GN (C x y)
-  | abs x > 4  || abs y > 4      = Blank
-  | abs x == 4 || abs y == 4     = Wall
-  | x ==  2 && y <   0           = Wall
-  | x >= -1 && y ==  1 && x <= 2 = Wall
-  | x == -3 && y ==  1           = Wall
-  | x ==  0 && y ==  3           = Wall
-  | x ==  0 && y ==  0           = Wall
-  | x ==  3 && y == -3           = Storage
-  | x ==  1 && y ==  2           = Storage
-  | x == -3 && y ==  2           = Storage
-  | x ==  1 && y == -1           = Storage
-  | x == -2 && y ==  1           = Box
-  | x ==  2 && y ==  2           = Box
-  | x <=  1 && y == -2 && x >= 0 = Box
-  | otherwise                    = Ground
-
-medium_maze3_GN :: Coord -> Tile
-medium_maze3_GN (C x y)
-  | abs x >  4 || abs y >  4           = Blank
-  | abs x == 4 || abs y == 4           = Wall
-  | x ==     1 && y <      0           = Wall
-  | x ==    -3 && y ==    -2           = Wall
-  | x <=     1 && x >     -2 && y == 0 = Wall
-  | x >     -3 && x <      3 && y == 2 = Wall
-  | x ==     3 && y >      1           = Storage
-  | y ==    -2 && x <      0           = Box
-  | y ==    -2 && x ==     2           = Box
-  | y ==    0  && x ==     3           = Box
-  | y == -1    && x > 1      && x < 4  = Storage
-  | otherwise                          = Ground
-
-medium_maze4_GN :: Coord -> Tile
-medium_maze4_GN (C x y)
-  | abs x > 4  || abs y > 4                  = Blank
-  | abs x == 4 || abs y == 4 || x == -3      = Wall
-  | x == -2 && (y == 3 || y == 0)            = Wall
-  | x == -1 &&  y == -1                      = Wall
-  | x == -0 &&  y == 1                       = Wall
-  | x ==  3 &&  y == 0                       = Wall
-  | x <   0 && (y == 2 || y == -3)           = Storage
-  | x == -1 &&  y == 1                       = Storage
-  | x ==  0 && (y == 2 || y == 0 || y == -1) = Box
-  | x ==  1 &&  y == -2                      = Box
-  | x ==  2 &&  y == -3                      = Box
-  | otherwise                                = Ground
-
-easy_spiralMaze_DM :: Coord -> Tile
-easy_spiralMaze_DM (C x y)
-  | abs x >  4 || abs y > 4      = Blank
-  | abs x == 4                   = Wall
-  | abs y == 4                   = Wall
-  | x ==  2 && y <=  1           = Wall
-  | x >= -1 && x <=  2 && y == 1 = Wall
-  | x == -1 && y >= -1 && y <= 1 = Wall
-  | x ==  0 && y == -1           = Box
-  | x ==  3 && y == -3           = Storage
-  | otherwise                    = Ground
-
-easy_decoratedMaze_BS :: Coord -> Tile
-easy_decoratedMaze_BS (C x y)
-  | abs x > 6  || abs y > 4          = Blank
-  | abs x == 6 || abs y == 4         = Wall
-  | abs x + abs y > 6                = Box
-  | abs x == 4 || abs y == 2         = Wall
-  | elem (x, y) [(-3, 1), (3, -1)]   = Box
-  | x == 0     && abs y == 1         = Box
-  | elem (x, y) [(-3, -1), (3, 1)]   = Storage
-  | elem (x, y) [(-2, 1), (2, -1)]   = Wall
-  | abs x > 1 && abs x < 4 && y == 0 = Wall
-  | otherwise                        = Ground
-
--- bad mazes
-badMazes :: [Maze]
-badMazes = [
-  Maze (C (-2) (-2)) badTestMaze_BS,
-  Maze (C 1 (-1))    cutOffStorageMaze_DM,
-  Maze (C (-1) 0)    holeInTheWallMaze_BS
-  ]
-
-badTestMaze_BS :: Coord -> Tile
-badTestMaze_BS (C x y)
-  | abs x > 4  || abs y > 4  = Blank
-  | abs x == 4 || abs y == 4 = Wall
-  | x ==  2                  = Wall
-  | x ==  3 && y <= 0        = Storage
-  | x >= -2 && y == 0        = Box
-  | otherwise                = Ground
-
-cutOffStorageMaze_DM :: Coord -> Tile
-cutOffStorageMaze_DM (C x y)
-  | abs x > 7 || abs y > 7                            = Blank
-  | abs x == 7                                        = Wall
-  | abs y == 7                                        = Wall
-  | x >= 4 && y == 4                                  = Wall
-  | x == 4 && y >= 4                                  = Wall
-  | x >= 5 && y >= 5                                  = Storage
-  | elem (x, y) [(-6, 6), (-6, -6), (6, -6), (6, -5)] = Storage
-  | x == 0 && elem y [-4 .. 2]                        = Box
-  | otherwise                                         = Ground
-
-holeInTheWallMaze_BS :: Coord -> Tile
-holeInTheWallMaze_BS (C x y)
-  | abs x > 2 || abs y > 1   = Blank
-  | x == -2 && y == 0        = Ground
-  | abs x == 2 || abs y == 1 = Wall
-  | x == 0 && y == 0         = Box
-  | x == 1 && y == 0         = Storage
-  | otherwise                = Ground
-
 ------------------------------
 -- DRAWING HELPER FUNCTIONS --
 ------------------------------
@@ -968,3 +828,144 @@ playerR = helmet & eyesR & face & armsR & shoeBackR & torso & shoeFrontR
 playerU = pocketsU & helmet & face & torso & shoesUD & armsUD
 playerL = reflected (pi / 2) playerR
 playerD = helmet & eyesUD & face & armsUD & shoesUD & torso
+
+
+-----------
+-- MAZES --
+-----------
+-- This is a shared base of Sokoban mazes created by students attending
+-- the 2022/23 MIMUW JNP-3 Haskell course. Any student is free to copy
+-- the contents of this document for themselves, as well as to add the
+-- mazes they have created themselves. Learn more about the base at
+-- https://bit.ly/SokobanMazesMIMUW
+
+-- correct mazes
+mazes :: [Maze]
+mazes = [
+  Maze (C (-2) (-2)) easy_testMaze_GN,
+  Maze (C 1 (-1))    easy_spiralMaze_DM,
+  Maze (C 0 0)       easy_decoratedMaze_BS,
+  Maze (C 1 1)       medium_maze4_GN,
+  Maze (C 0 1)       medium_maze3_GN,
+  Maze (C 1 (-3))    hard_maze2_GN
+  ]
+
+easy_testMaze_GN :: Coord -> Tile
+easy_testMaze_GN (C x y)
+  | abs x > 4  || abs y > 4  = Blank
+  | abs x == 4 || abs y == 4 = Wall
+  | x ==  2 && y <= 0        = Wall
+  | x ==  3 && y <= 0        = Storage
+  | x >= -2 && y == 0        = Box
+  | otherwise                = Ground
+
+hard_maze2_GN :: Coord -> Tile
+hard_maze2_GN (C x y)
+  | abs x > 4  || abs y > 4      = Blank
+  | abs x == 4 || abs y == 4     = Wall
+  | x ==  2 && y <   0           = Wall
+  | x >= -1 && y ==  1 && x <= 2 = Wall
+  | x == -3 && y ==  1           = Wall
+  | x ==  0 && y ==  3           = Wall
+  | x ==  0 && y ==  0           = Wall
+  | x ==  3 && y == -3           = Storage
+  | x ==  1 && y ==  2           = Storage
+  | x == -3 && y ==  2           = Storage
+  | x ==  1 && y == -1           = Storage
+  | x == -2 && y ==  1           = Box
+  | x ==  2 && y ==  2           = Box
+  | x <=  1 && y == -2 && x >= 0 = Box
+  | otherwise                    = Ground
+
+medium_maze3_GN :: Coord -> Tile
+medium_maze3_GN (C x y)
+  | abs x >  4 || abs y >  4           = Blank
+  | abs x == 4 || abs y == 4           = Wall
+  | x ==     1 && y <      0           = Wall
+  | x ==    -3 && y ==    -2           = Wall
+  | x <=     1 && x >     -2 && y == 0 = Wall
+  | x >     -3 && x <      3 && y == 2 = Wall
+  | x ==     3 && y >      1           = Storage
+  | y ==    -2 && x <      0           = Box
+  | y ==    -2 && x ==     2           = Box
+  | y ==    0  && x ==     3           = Box
+  | y == -1    && x > 1      && x < 4  = Storage
+  | otherwise                          = Ground
+
+medium_maze4_GN :: Coord -> Tile
+medium_maze4_GN (C x y)
+  | abs x > 4  || abs y > 4                  = Blank
+  | abs x == 4 || abs y == 4 || x == -3      = Wall
+  | x == -2 && (y == 3 || y == 0)            = Wall
+  | x == -1 &&  y == -1                      = Wall
+  | x == -0 &&  y == 1                       = Wall
+  | x ==  3 &&  y == 0                       = Wall
+  | x <   0 && (y == 2 || y == -3)           = Storage
+  | x == -1 &&  y == 1                       = Storage
+  | x ==  0 && (y == 2 || y == 0 || y == -1) = Box
+  | x ==  1 &&  y == -2                      = Box
+  | x ==  2 &&  y == -3                      = Box
+  | otherwise                                = Ground
+
+easy_spiralMaze_DM :: Coord -> Tile
+easy_spiralMaze_DM (C x y)
+  | abs x >  4 || abs y > 4      = Blank
+  | abs x == 4                   = Wall
+  | abs y == 4                   = Wall
+  | x ==  2 && y <=  1           = Wall
+  | x >= -1 && x <=  2 && y == 1 = Wall
+  | x == -1 && y >= -1 && y <= 1 = Wall
+  | x ==  0 && y == -1           = Box
+  | x ==  3 && y == -3           = Storage
+  | otherwise                    = Ground
+
+easy_decoratedMaze_BS :: Coord -> Tile
+easy_decoratedMaze_BS (C x y)
+  | abs x > 6  || abs y > 4          = Blank
+  | abs x == 6 || abs y == 4         = Wall
+  | abs x + abs y > 6                = Box
+  | abs x == 4 || abs y == 2         = Wall
+  | elem (x, y) [(-3, 1), (3, -1)]   = Box
+  | x == 0     && abs y == 1         = Box
+  | elem (x, y) [(-3, -1), (3, 1)]   = Storage
+  | elem (x, y) [(-2, 1), (2, -1)]   = Wall
+  | abs x > 1 && abs x < 4 && y == 0 = Wall
+  | otherwise                        = Ground
+
+-- bad mazes
+badMazes :: [Maze]
+badMazes = [
+  Maze (C (-2) (-2)) badTestMaze_BS,
+  Maze (C 1 (-1))    cutOffStorageMaze_DM,
+  Maze (C (-1) 0)    holeInTheWallMaze_BS
+  ]
+
+badTestMaze_BS :: Coord -> Tile
+badTestMaze_BS (C x y)
+  | abs x > 4  || abs y > 4  = Blank
+  | abs x == 4 || abs y == 4 = Wall
+  | x ==  2                  = Wall
+  | x ==  3 && y <= 0        = Storage
+  | x >= -2 && y == 0        = Box
+  | otherwise                = Ground
+
+cutOffStorageMaze_DM :: Coord -> Tile
+cutOffStorageMaze_DM (C x y)
+  | abs x > 7 || abs y > 7                            = Blank
+  | abs x == 7                                        = Wall
+  | abs y == 7                                        = Wall
+  | x >= 4 && y == 4                                  = Wall
+  | x == 4 && y >= 4                                  = Wall
+  | x >= 5 && y >= 5                                  = Storage
+  | elem (x, y) [(-6, 6), (-6, -6), (6, -6), (6, -5)] = Storage
+  | x == 0 && elem y [-4 .. 2]                        = Box
+  | otherwise                                         = Ground
+
+holeInTheWallMaze_BS :: Coord -> Tile
+holeInTheWallMaze_BS (C x y)
+  | abs x > 2 || abs y > 1   = Blank
+  | x == -2 && y == 0        = Ground
+  | abs x == 2 || abs y == 1 = Wall
+  | x == 0 && y == 0         = Box
+  | x == 1 && y == 0         = Storage
+  | otherwise                = Ground
