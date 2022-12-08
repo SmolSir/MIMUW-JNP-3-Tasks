@@ -97,23 +97,20 @@ mazeFindTiles (Maze _ fun) tile =
   [coord | coord <- defaultMazeCoords, fun coord == tile]
 
 initialBoxes :: Maze -> [Coord]
-initialBoxes maze =
-  let (Maze initial _) = maze in
+initialBoxes maze@(Maze initial _) =
   findReachable (mazeFindTiles maze Box) initial (neighbours maze)
 
 -- removes just the initially reachable boxes (the other boxes are not
 -- present in the state's boxes list, so they can remain visible)
 removeBoxes :: Maze -> Maze
-removeBoxes maze =
-  let (Maze initial fun) = maze in
+removeBoxes maze@(Maze initial fun) =
   let initialCoords = initialBoxes maze in
   let removeCheck = \coord -> elem coord initialCoords && fun coord == Box in
   let boxlessFun = \coord -> if removeCheck coord then Ground else fun coord in
   Maze initial boxlessFun
 
 addBoxes :: [Coord] -> Maze -> Maze
-addBoxes coords maze =
-  let (Maze initial boxlessFun) = maze in
+addBoxes coords maze@(Maze initial boxlessFun) =
   let fun = \coord -> if elem coord coords then Box else boxlessFun coord in
   Maze initial fun
   
@@ -130,16 +127,14 @@ neighbours (Maze _ fun) =
     else []
 
 isClosed :: Maze -> Bool
-isClosed maze = 
-  let (Maze initial fun) = maze in
+isClosed maze@(Maze initial fun) =
   let noBlank = \coord -> not (fun coord == Blank) in
   isEmptyTile (fun initial) &&
   isGraphClosed initial (neighbours maze) noBlank
 
 -- This function cannot detect that a maze is not closed. Use isClosed for that.
 isSane :: Maze -> Bool
-isSane maze =
-  let (Maze initial _) = maze in
+isSane maze@(Maze initial _) =
   let boxlessMaze = removeBoxes maze in
   let boxes = mazeFindTiles maze Box in
   let storages = mazeFindTiles boxlessMaze Storage in
@@ -158,11 +153,11 @@ initialLevel = 0
 
 loadLevelInitialState :: Int -> State
 loadLevelInitialState level = 
-  let (Maze initial fun) = mazes !! level in
+  let maze@(Maze initial fun) = mazes !! level in
   State {
     statePlayer    = initial,
     stateDirection = D,
-    stateBoxes     = initialBoxes (Maze initial fun),
+    stateBoxes     = initialBoxes maze,
     stateLevel     = level,
     stateScore     = 0
 }
